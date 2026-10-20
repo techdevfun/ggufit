@@ -1,0 +1,14 @@
+[project]
+name = "ggufit"
+version = "1.0.0"
+description = "Will this GGUF model fit on your GPU? Offline, zero-dependency VRAM check."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+keywords = ["gguf", "vram", "gpu", "llm", "llama.cpp"]
+
+[project.scripts]
+ggufit = "ggufit:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
