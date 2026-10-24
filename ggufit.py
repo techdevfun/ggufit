@@ -569,8 +569,7 @@ def main(argv=None):
             "total_gb": round(est["total"] / GB, 2),
             "targets": rows,
         }, indent=2))
-        worst = min(r["verdict"] for r in rows)
-        return 2 if worst == "WON'T FIT" else 0
+        return 2 if any(r["verdict"] == "WON'T FIT" for r in rows) else 0
 
     if args.table:
         print("%-32s %8s %8s  %s" % ("GPU", "usable", "total", "verdict"))
