@@ -213,6 +213,21 @@ class CliTest(unittest.TestCase):
         self.assertIn("total_gb", data)
         self.assertEqual(data["targets"][0]["gpu"], "NVIDIA GeForce RTX 4060")
 
+    def test_json_exit_2_when_any_target_wont_fit(self):
+        r = self.run_cli("--params", "70B", "--quant", "q4_k_m",
+                         "--gpu", "RTX 4090", "--gpu", "A100 80GB", "--json")
+        self.assertEqual(r.returncode, 2, r.stderr)
+        data = json.loads(r.stdout)
+        self.assertEqual([t["verdict"] for t in data["targets"]],
+                         ["WON'T FIT", "FITS"])
+
+    def test_json_exit_0_when_all_targets_fit(self):
+        r = self.run_cli("--params", "8B", "--quant", "q4_k_m",
+                         "--gpu", "RTX 4060", "--gpu", "RTX 4090", "--json")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        data = json.loads(r.stdout)
+        self.assertNotIn("WON'T FIT", [t["verdict"] for t in data["targets"]])
+
     def test_table(self):
         r = self.run_cli("--params", "8B", "--quant", "q4_k_m", "--table")
         self.assertEqual(r.returncode, 0, r.stderr)
