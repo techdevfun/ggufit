@@ -117,6 +117,7 @@ cd examples && sh run-demo.sh   # compare with expected-output.txt
 - [ ] `--kv-dtype` (quantized KV cache changes the math a lot)
 - [ ] MoE-aware estimates (active vs. total params)
 - [ ] Auto-detect the local GPU when possible (no dependency is the hard part)
+- [ ] Concurrency input for the KV estimate (parallel requests are what OOM a server, not a single chat — suggested by a reader, Oct 2026)
 
 ## Contributing
 
