@@ -57,7 +57,7 @@ python3 ggufit.py --params 8B --quant q4_k_m --table
 python3 ggufit.py model.gguf --vram 10
 
 # multiple cards at once
-python3 ggufit.py model.gguf --gpu "4060" --gpu "M4"
+python3 ggufit.py model.gguf --gpu "RTX 4060" --gpu "M4"
 
 # machine-readable, for scripts and CI
 python3 ggufit.py model.gguf --gpu "RTX 4090" --json
