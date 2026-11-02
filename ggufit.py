@@ -540,7 +540,11 @@ def main(argv=None):
     if args.vram:
         targets.append(("custom (%.1f GB usable)" % args.vram, args.vram, args.vram))
     for q in args.gpu:
-        hit = find_gpu(q)
+        try:
+            hit = find_gpu(q)
+        except GgufError as e:
+            print("error: %s" % e, file=sys.stderr)
+            return 1
         if hit is None:
             print("error: no GPU matches '%s' (try --list-gpus)" % q, file=sys.stderr)
             return 1
