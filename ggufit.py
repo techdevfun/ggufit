@@ -82,9 +82,11 @@ QUANT_ALIASES = {
     "iq4_nl": "iq4_nl", "iq4nl": "iq4_nl",
 }
 
-# Quant ladder, best quality first — used for "what smaller quant would fit?"
+# Quant ladder, best quality first — and non-increasing bits-per-weight, so
+# suggest() offers the best fitting quant first. IQ4_XS (4.25 bpw) sits
+# above Q3_K (3.44 bpw): it is the better model and the smaller step down.
 QUANT_LADDER = ["f32", "f16", "q8_0", "q6_k", "q5_k", "q4_k", "q4_0",
-                "q3_k", "iq4_xs", "q2_k", "iq2_xs"]
+                "iq4_xs", "q3_k", "q2_k", "iq2_xs"]
 
 # ---------------------------------------------------------------------------
 # GPU database: usable VRAM, not marketing VRAM.
