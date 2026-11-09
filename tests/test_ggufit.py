@@ -140,6 +140,23 @@ class VerdictTest(unittest.TestCase):
         s = ggufit.suggest(m, 4096, 24 * ggufit.GB)
         self.assertTrue(any("offload" in x for x in s), "got %r" % (s,))
 
+    def test_suggest_prefers_iq4_xs_over_q3_k(self):
+        # 8B Q4_K at ctx 4096 on 7.1 GB usable: IQ4_XS (7.01 GB total) fits
+        # and is better quality than Q3_K (6.22 GB) — the ladder must offer
+        # the better quant first instead of jumping straight to Q3_K.
+        m = ggufit.model_from_manual("8B", "q4_k_m")
+        s = ggufit.suggest(m, 4096, 7.1 * ggufit.GB)
+        self.assertTrue(any("iq4_xs" in x for x in s), "got %r" % (s,))
+        self.assertFalse(any("q3_k" in x for x in s), "got %r" % (s,))
+
+    def test_quant_ladder_bpw_nonincreasing(self):
+        # suggest() walks the ladder top-down and takes the first fit, so
+        # bits-per-weight must never increase along it — otherwise a worse
+        # quant gets suggested while a better one would also fit.
+        bpws = [ggufit.BPW[q][0] for q in ggufit.QUANT_LADDER]
+        self.assertEqual(bpws, sorted(bpws, reverse=True),
+                         "ladder out of bpw order: %r" % (bpws,))
+
 
 class ManualModeTest(unittest.TestCase):
     def test_params_parsing(self):
